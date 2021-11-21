@@ -5,3 +5,13 @@ export const GET_PROJECTS = 'GET_PROJECTS';
 export const ADD_PROJECT = 'ADD_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const ACTIVE_PROJECT = 'ACTIVE_PROJECT';
+
+export const VALIDATE_TASK = 'VALIDATE_TASK';
+export const GET_TASKS_PROJECT = 'GET_TASKS_PROJECT';
+export const ADD_TASK = 'ADD_TASK';
+export const DELETE_TASK = 'DELETE_TASK';
+export const STATUS_TASK = 'STATUS_TASK';
+export const UPDATE_TASK = 'UPDATE_TASK';
+export const ACTIVE_TASK = 'ACTIVE_TASK';
+export const CLEAR_ACTIVE_TASK = 'CLEAR_ACTIVE_TASK';
+

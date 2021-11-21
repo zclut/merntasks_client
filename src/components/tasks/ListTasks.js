@@ -1,12 +1,17 @@
 import React, { Fragment, useContext } from 'react';
 import projectContext from '../../context/projects/projectContext';
+import TaskContext from '../../context/tasks/taskContext';
 import Task from './Task';
+
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const ListTasks = () => {
 
     // Get the context
     const projectsContext = useContext(projectContext);
+    const tasksContext = useContext(TaskContext);
     const { project, deleteProject } = projectsContext;
+    const { tasksProject } = tasksContext;
 
     // Check if project is active
     if (!project) return <h2>Selecciona un proyecto</h2>;
@@ -15,26 +20,27 @@ const ListTasks = () => {
     const [activeProject] = project;
     const { id, name } = activeProject;
 
-    const tasks = [
-        {name: 'Elegir Plataforma', status: true},
-        {name: 'Elegir Colores', status: false},
-        {name: 'Elegir Plataformas de pago', status: false},
-        {name: 'Elegir Hosting', status: true},
-    ];
-
     return (
         <Fragment>
             <h2>Proyecto: {name}</h2>
 
             <ul className="listado-tareas">
-                    {tasks.lenght === 0 
-                        ? ( <li className="tarea"><p>No hay tareas</p></li> )
-                        : tasks.map(task => (
-                            <Task 
-                                task={task}
-                            />
-                        ))
-                    }
+                {tasksProject.lenght === 0
+                    ? (<li className="tarea"><p>No hay tareas</p></li>)
+                    :
+                    <TransitionGroup>
+                        {tasksProject.map(task => (
+                            <CSSTransition
+                                key={task.id}
+                                timeout={200}
+                                classNames="tarea"
+                            >
+                                <Task task={task}/>
+                            </CSSTransition>
+                        ))}
+                    </TransitionGroup>
+
+                }
             </ul>
 
             <button
