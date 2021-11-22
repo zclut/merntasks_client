@@ -8,6 +8,8 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
 export const ACTIVE_PROJECT = 'ACTIVE_PROJECT';
 
+export const ERROR_PROJECT = 'ERROR_PROJECT';
+
 // TASK
 
 export const VALIDATE_TASK = 'VALIDATE_TASK';

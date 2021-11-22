@@ -18,7 +18,7 @@ const ListTasks = () => {
 
     // Array destructuring
     const [activeProject] = project;
-    const { id, name } = activeProject;
+    const { _id, name } = activeProject;
 
     return (
         <Fragment>
@@ -31,7 +31,7 @@ const ListTasks = () => {
                     <TransitionGroup>
                         {tasksProject.map(task => (
                             <CSSTransition
-                                key={task.id}
+                                key={task._id}
                                 timeout={200}
                                 classNames="tarea"
                             >
@@ -46,7 +46,7 @@ const ListTasks = () => {
             <button
                 type="button"
                 className="btn btn-eliminar"
-                onClick={() => deleteProject(id)}
+                onClick={() => deleteProject(_id)}
             >Eliminar Proyecto &times;</button>
         </Fragment>
     );

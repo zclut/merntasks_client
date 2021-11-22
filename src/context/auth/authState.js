@@ -76,7 +76,7 @@ const AuthState = props => {
 
         try {
             const response = await client.get('/api/auth');
-            console.log(response.data);
+            //console.log(response.data);
             dispatch({
                 type: GET_USER,
                 payload: response.data.user

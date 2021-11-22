@@ -1,23 +1,19 @@
-import React, {useReducer} from 'react';
-
-import uuid from 'uuid/dist/v4';
+import React, { useReducer } from 'react';
 
 import projectContext from './projectContext';
 import projectReducer from './projectReducer';
-import { FORM_PROJECT, GET_PROJECTS, ADD_PROJECT, VALIDATE_FORM, ACTIVE_PROJECT, DELETE_PROJECT } from '../../types';
+import { FORM_PROJECT, GET_PROJECTS, ADD_PROJECT, VALIDATE_FORM, ACTIVE_PROJECT, DELETE_PROJECT, ERROR_PROJECT } from '../../types';
+
+import client from '../../config/axios';
 
 const ProjectState = props => {
-    const projects = [
-        {id: 1, name: 'Tarea de MERN'},
-        {id: 2, name: 'Intranet'},
-        {id: 3, name: 'Diseño Web'},
-    ]
 
     const initialState = {
         projects: [],
         project: null,
         form: false,
-        errorForm: false
+        errorForm: false,
+        msg: null
     };
 
     // Dispatch to execute actions
@@ -40,20 +36,47 @@ const ProjectState = props => {
     };
 
     // Get the projects
-    const getProjects = () => {
-        dispatch({
-            type: GET_PROJECTS,
-            payload: projects,
-        });
+    const getProjects = async () => {
+        try {
+            const response = await client.get('/api/projects');
+            dispatch({
+                type: GET_PROJECTS,
+                payload: response.data,
+            });
+        } catch (error) {
+            const alerta = {
+                msg: 'Hubo un error',
+                category: 'alerta-error'
+            };
+
+            dispatch({
+                type: ERROR_PROJECT,
+                payload: alerta,
+            });
+        }
     };
 
     // Add new project
-    const addProject = (project) => {
-        project.id = uuid();
-        dispatch({
-            type: ADD_PROJECT,
-            payload: project,
-        });
+    const addProject = async (project) => {
+        try {
+            const response = await client.post('/api/projects', project);
+
+            // Insert project in state
+            dispatch({
+                type: ADD_PROJECT,
+                payload: response.data,
+            });
+        } catch (error) {
+            const alerta = {
+                msg: 'Hubo un error',
+                category: 'alerta-error'
+            };
+
+            dispatch({
+                type: ERROR_PROJECT,
+                payload: alerta,
+            });
+        }
     };
 
     // Get active project
@@ -65,11 +88,25 @@ const ProjectState = props => {
     };
 
     // Delete project
-    const deleteProject = (projectId) => {
-        dispatch({
-            type: DELETE_PROJECT,
-            payload: projectId,
-        });
+    const deleteProject = async (projectId) => {
+        try {
+            await client.delete(`/api/projects/${projectId}`);
+
+            dispatch({
+                type: DELETE_PROJECT,
+                payload: projectId,
+            });
+        } catch (error) {
+            const alerta = {
+                msg: 'Hubo un error',
+                category: 'alerta-error'
+            };
+
+            dispatch({
+                type: ERROR_PROJECT,
+                payload: alerta,
+            });
+        }
     };
 
     return (
@@ -79,6 +116,7 @@ const ProjectState = props => {
                 project: state.project,
                 form: state.form,
                 errorForm: state.errorForm,
+                msg: state.msg,
                 showForm,
                 showError,
                 getProjects,

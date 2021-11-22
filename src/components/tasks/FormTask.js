@@ -51,7 +51,7 @@ const FormTask = () => {
         // Check if is edit or add
         if (taskSelected === null) {
             // Add task
-            task.projectId = activeProject.id;
+            task.projectId = activeProject._id;
             task.status = false;
             addTask(task);
         } else {
@@ -63,7 +63,7 @@ const FormTask = () => {
         }
 
         // Get and filter task of active project
-        getTasksProject(activeProject.id);
+        getTasksProject(activeProject._id);
 
         // Reset form
         setTask({

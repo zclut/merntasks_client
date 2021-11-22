@@ -11,7 +11,7 @@ const Project = ({project}) => {
     const tasksContext = useContext(TaskContext);
     const { getTasksProject } = tasksContext;
 
-    const { id, name } = project;
+    const { _id, name } = project;
 
     return (
         <li>
@@ -19,8 +19,8 @@ const Project = ({project}) => {
                 type="button"
                 className="btn btn-blank"
                 onClick={() => {
-                    getActiveProject(id);
-                    getTasksProject(id);
+                    getActiveProject(_id);
+                    getTasksProject(_id);
                 }}
             >
                 {name}
