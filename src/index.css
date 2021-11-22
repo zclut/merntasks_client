@@ -358,3 +358,8 @@ aside  {
   background-color: rgb(230, 78, 78);
   color: var(--blanco);
 }
+
+.cerrar-sesion{
+  color: var(--blanco);
+  font-weight: bold;
+}

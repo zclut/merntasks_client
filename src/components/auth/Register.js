@@ -1,7 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import AlertContext from '../../context/alerts/alertContext';
+import AuthContext from '../../context/auth/authContext';
 
-const Register = () => {
+const Register = (props) => {
+
+    // Get the context
+    const alertContext = useContext(AlertContext);
+    const { alert, showAlert } = alertContext;
+
+    const authContext = useContext(AuthContext);
+    const { msg, isAuthenticated, register } = authContext;
+
+    // Check if the user is already logged in or registered or is register
+    useEffect(() => {
+        if (isAuthenticated) props.history.push('/projects');
+
+        if (msg) showAlert(msg.msg, msg.category);
+
+    }, [msg, isAuthenticated, props.history]);
+
     // Create a state variable to store the user
     const [user, setUser] = useState({
         name: '',
@@ -21,10 +39,36 @@ const Register = () => {
     // When user submits the form
     const handleSubmit = e => {
         e.preventDefault();
+
+        // Check if inputs are not empty
+        if (name === '' || email === '' || password === '' || confirm === '') {
+            showAlert('Todos los campos son obligatorios', 'error');
+            return;
+        }
+
+        // Check if the password length is greather than 6
+        if (password.length < 6) {
+            showAlert('La contraseña debe tener al menos 6 caracteres', 'error');
+            return;
+        }
+
+        // Check if the password and confirm match
+        if (password !== confirm) {
+            showAlert('Las contraseñas no coinciden', 'error');
+            return;
+        }
+
+        // Send the data to the server
+        register({
+            name,
+            email,
+            password
+        });
     }
 
     return (
         <div className="form-usuario">
+            {alert ? (<div className={`alerta ${alert.category}`}>{alert.msg}</div>) : null}
             <div className="contenedor-form sombra-dark">
                 <h1>Registrate</h1>
 
@@ -97,5 +141,5 @@ const Register = () => {
         </div>
     );
 }
- 
+
 export default Register;
