@@ -18,6 +18,7 @@ const Login = (props) => {
 
         if (msg) showAlert(msg.msg, msg.category);
 
+        // eslint-disable-next-line
     }, [msg, isAuthenticated, props.history]);
 
     // Create a state variable to store the user

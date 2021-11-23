@@ -8,16 +8,16 @@ const Task = ({ task }) => {
     const projectsContext = useContext(projectContext);
     const { project } = projectsContext;
     const tasksContext = useContext(TaskContext);
-    const { deleteTask, getTasksProject, changeStatusTask, activeTask } = tasksContext;
+    const { deleteTask, getTasksProject, updateTask, activeTask } = tasksContext;
 
     // Array destructuring
     const [activeProject] = project;
 
-    const { id, name, status } = task;
+    const { _id, name, status } = task;
 
     const changeStatus = task => {
         task.status = (task.status) ? false : true;
-        changeStatusTask(task);
+        updateTask(task);
     };
 
     return (
@@ -52,8 +52,8 @@ const Task = ({ task }) => {
                     type="button"
                     className="btn btn-secundario"
                     onClick={() => {
-                        deleteTask(id)
-                        getTasksProject(activeProject.id)
+                        deleteTask(_id, activeProject._id);
+                        getTasksProject(activeProject._id)
                     }}
                 >Eliminar</button>
             </div>

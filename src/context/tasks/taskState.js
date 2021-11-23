@@ -2,20 +2,14 @@ import React, { useReducer } from 'react';
 import TaskContext from './taskContext';
 import TaskReducer from './taskReducer';
 
-import uuid from 'uuid/dist/v4';
+import { GET_TASKS_PROJECT, ADD_TASK, VALIDATE_TASK, DELETE_TASK, ACTIVE_TASK, UPDATE_TASK, CLEAR_ACTIVE_TASK } from '../../types';
 
-import { GET_TASKS_PROJECT, ADD_TASK, VALIDATE_TASK, DELETE_TASK, STATUS_TASK, ACTIVE_TASK, UPDATE_TASK, CLEAR_ACTIVE_TASK } from '../../types';
+import client from '../../config/axios';
 
 const TaskState = props => {
-    const tasks = [
-        {id: 1, name: 'Elegir Plataforma', status: true, projectId : 1},
-        {id: 2, name: 'Elegir Colores', status: false, projectId : 2},
-        {id: 3, name: 'Elegir Plataformas de pago', status: false, projectId : 3},
-    ];
 
     const initialState = {
-        tasks: tasks,
-        tasksProject: null,
+        tasksProject: [],
         errorTask: false,
         taskSelected: null
     };
@@ -24,20 +18,33 @@ const TaskState = props => {
     const [state, dispatch] = useReducer(TaskReducer, initialState);
 
     // Actions to be executed (CRUD)
-    const getTasksProject = (projectId) => {
-        dispatch({
-            type: GET_TASKS_PROJECT,
-            payload: projectId,
-        });
+    const getTasksProject = async (project) => {
+
+        try {
+            const response = await client.get('/api/tasks', { params: { project } });
+            console.log(response.data);
+            dispatch({
+                type: GET_TASKS_PROJECT,
+                payload: response.data.tasks
+            });
+            
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // Add task
-    const addTask = task => {
-        task.id = uuid();
-        dispatch({
-            type: ADD_TASK,
-            payload: task
-        });
+    const addTask = async task => {
+        try {
+            const response = await client.post('/api/tasks', task);
+            dispatch({
+                type: ADD_TASK,
+                payload: response.data
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
     };
 
     // Validate task
@@ -48,19 +55,31 @@ const TaskState = props => {
     };
 
     // Delete task
-    const deleteTask = taskId => {
-        dispatch({
-            type: DELETE_TASK,
-            payload: taskId
-        });
+    const deleteTask = async (id, project) => {
+        try {
+            await client.delete(`/api/tasks/${id}`, { params: { project } });
+
+            dispatch({
+                type: DELETE_TASK,
+                payload: id
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    // Change status task
-    const changeStatusTask = task => {
-        dispatch({
-            type: STATUS_TASK,
-            payload: task
-        });
+    // Update task
+    const updateTask = async task => {
+        try {
+            const response = await client.put(`/api/tasks/${task._id}`, task);
+            console.log(response.data);
+            dispatch({
+                type: UPDATE_TASK,
+                payload: response.data.task
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // Active task
@@ -71,13 +90,7 @@ const TaskState = props => {
         });
     };
 
-    // Update task
-    const updateTask = task => {
-        dispatch({
-            type: UPDATE_TASK,
-            payload: task
-        });
-    };
+
 
     // Clear active task
     const clearActiveTask = () => {
@@ -89,7 +102,6 @@ const TaskState = props => {
     return (
         <TaskContext.Provider
             value={{
-                tasks: state.tasks,
                 tasksProject: state.tasksProject,
                 errorTask: state.errorTask,
                 taskSelected: state.taskSelected,
@@ -97,7 +109,6 @@ const TaskState = props => {
                 addTask,
                 validateTask,
                 deleteTask,
-                changeStatusTask,
                 activeTask,
                 updateTask,
                 clearActiveTask

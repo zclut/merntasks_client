@@ -1,17 +1,17 @@
-import { GET_TASKS_PROJECT, ADD_TASK, VALIDATE_TASK, DELETE_TASK, STATUS_TASK, ACTIVE_TASK, UPDATE_TASK, CLEAR_ACTIVE_TASK} from '../../types';
+import { GET_TASKS_PROJECT, ADD_TASK, VALIDATE_TASK, DELETE_TASK, ACTIVE_TASK, UPDATE_TASK, CLEAR_ACTIVE_TASK} from '../../types';
 
 export default (state, action) => {
     switch (action.type) {
         case GET_TASKS_PROJECT:
             return {
                 ...state,
-                tasksProject: state.tasks.filter(task => task.projectId === action.payload) 
+                tasksProject: action.payload
             };
 
         case ADD_TASK:
             return {
                 ...state,
-                tasks: [...state.tasks, action.payload],
+                tasksProject: [ action.payload, ...state.tasksProject],
                 errorTask: false
             };
 
@@ -24,14 +24,13 @@ export default (state, action) => {
         case DELETE_TASK:
             return {
                 ...state,
-                tasks: state.tasks.filter(task => task.id !== action.payload)
+                tasksProject: state.tasksProject.filter(task => task._id !== action.payload)
             };
 
         case UPDATE_TASK:
-        case STATUS_TASK:
             return {
                 ...state,
-                tasks: state.tasks.map(task => task.id === action.payload.id ? action.payload : task)
+                tasksProject: state.tasksProject.map(task => task._id === action.payload.id ? action.payload._id : task)
                 //taskSelected: null
             };
 

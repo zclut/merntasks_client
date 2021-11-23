@@ -8,11 +8,12 @@ import AuthContext from '../../context/auth/authContext';
 const Projects = () => {
 
     // Get the context
-    const authContext = React.useContext(AuthContext);
+    const authContext = useContext(AuthContext);
     const { getAuthUser } = authContext;
 
     useEffect(() => {
         getAuthUser();
+        // eslint-disable-next-line
     }, []);
 
     return (

@@ -16,7 +16,6 @@ export const VALIDATE_TASK = 'VALIDATE_TASK';
 export const GET_TASKS_PROJECT = 'GET_TASKS_PROJECT';
 export const ADD_TASK = 'ADD_TASK';
 export const DELETE_TASK = 'DELETE_TASK';
-export const STATUS_TASK = 'STATUS_TASK';
 export const UPDATE_TASK = 'UPDATE_TASK';
 export const ACTIVE_TASK = 'ACTIVE_TASK';
 export const CLEAR_ACTIVE_TASK = 'CLEAR_ACTIVE_TASK';

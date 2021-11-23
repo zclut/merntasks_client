@@ -1,8 +1,8 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import projectContext from '../../context/projects/projectContext';
 import TaskContext from '../../context/tasks/taskContext';
 
-const Project = ({project}) => {
+const Project = ({ project }) => {
 
     // Get the context
     const projectsContext = useContext(projectContext);
@@ -13,15 +13,17 @@ const Project = ({project}) => {
 
     const { _id, name } = project;
 
+    const selectProject = id => {
+        getActiveProject(id);
+        getTasksProject(id);
+    }
+
     return (
         <li>
             <button
                 type="button"
                 className="btn btn-blank"
-                onClick={() => {
-                    getActiveProject(_id);
-                    getTasksProject(_id);
-                }}
+                onClick={() => selectProject(_id)}
             >
                 {name}
             </button>
